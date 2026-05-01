@@ -8,6 +8,7 @@ std::vector<std::string> buffer;
 
 // считывание в список 
 void read(std::string filename){
+
     std::string s;
 
     std::ifstream in;
@@ -40,7 +41,7 @@ void change(int position, std::string new_str){
     
     auto it = buffer.begin() + position - 1;
     if (!(buffer.begin() <= it && it <= buffer.end())){
-        throw "Ошибка: выход за пределы буфера";
+        throw std::out_of_range("Ошибка: выход за пределы буфера");
     }
     else *it = new_str;
     
@@ -48,8 +49,12 @@ void change(int position, std::string new_str){
 
 //добавление строки по индексу
 void add(int position, std::string new_str){
-    auto it = buffer.begin() + position;
-    buffer.insert(it, new_str);
+    auto it = buffer.begin() + position-1;
+    if (!(buffer.begin() <= it && it <= buffer.end())){
+        throw std::out_of_range("Ошибка: выход за пределы буфера");
+    }
+    else
+        buffer.insert(it, new_str);
 
 }
 // Вывод на экран
@@ -62,23 +67,62 @@ void show(){
 }
 
 
+
 int main(){
-
-    std::string filename_in = "input.txt";
-    read(filename_in);
-    std::string filename_out = "output.txt";
-    save(filename_out);
-
-
-    show();
-    std::cout << std::endl;
-    add(0, "qwe");
+    int choice;
     
-    show();
-    change(3, "World qwe");
-    show();
-    filename_out = "output2.txt";
-    save(filename_out);
-
+        try{
+            while (choice != 6){
+            std::cout << "\n===Текстовый редактор===\n";
+            std::cout << "1. Открыть файл\n";
+            std::cout << "2. Сохранить в файл\n";
+            std::cout << "3. Изменить строку\n";
+            std::cout << "4. Добавить строку\n";
+            std::cout << "5. Вывести на экран\n";
+            std::cout << "6. Выйти\n";
+            std::cout << "Выберите вариант работы: ";
+            std::cin >> choice;
+            if (choice == 1){
+                std::string filename;
+                std::cout << "Введите имя файла: ";
+                std::cin >> filename;
+                read(filename);
+            }
+            else if (choice == 2){
+                std::string filename;
+                std::cout << "Введите имя файла: ";
+                std::cin >> filename;
+                save(filename);
+            }
+            else if(choice == 3){
+                int pos;
+                std::string new_string;
+                std::cout << "Введите позицию для изменения: ";
+                std::cin >> pos;
+                std::cout << "Введите новую строку: ";
+                std::cin >> new_string;
+                change(pos, new_string);
+            }
+            else if (choice == 4){
+                int pos;
+                std::string new_string;
+                std::cout << "Введите позицию для добавления: ";
+                std::cin >> pos;
+                std::cout << "Введите новую строку: ";
+                std::cin >> new_string;
+                add(pos, new_string);
+            }
+            else if(choice == 5){
+                show();
+            }
+            else if(choice == 6){
+                exit(0);
+            }
+        }
+        }
+        catch(std::exception& e){
+            std::cerr << e.what() << std::endl;
+        }
+    
     return 0;
 }
