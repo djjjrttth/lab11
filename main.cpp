@@ -57,6 +57,15 @@ void add(int position, std::string new_str){
         buffer.insert(it, new_str);
 
 }
+
+void remove(int position){
+    auto it = buffer.begin() + position - 1;
+    if (!(buffer.begin() <= it && it <= buffer.end())){
+        throw std::out_of_range("Ошибка: выход за пределы буфера");
+    }
+    else
+        buffer.erase(it);
+}
 // Вывод на экран
 // Символ `` используется для того, чтобы видеть какие слова хранятся как один элемент в списке
 void show(){
@@ -72,14 +81,15 @@ int main(){
     int choice;
     
         try{
-            while (choice != 6){
+            while (choice != 7){
             std::cout << "\n===Текстовый редактор===\n";
             std::cout << "1. Открыть файл\n";
             std::cout << "2. Сохранить в файл\n";
             std::cout << "3. Изменить строку\n";
             std::cout << "4. Добавить строку\n";
             std::cout << "5. Вывести на экран\n";
-            std::cout << "6. Выйти\n";
+            std::cout << "6. Удалить строку\n";
+            std::cout << "7. Выйти\n";
             std::cout << "Выберите вариант работы: ";
             std::cin >> choice;
             if (choice == 1){
@@ -115,7 +125,13 @@ int main(){
             else if(choice == 5){
                 show();
             }
-            else if(choice == 6){
+            else if (choice == 6){
+                int pos;
+                std::cout << "Введите позицию для удаления: ";
+                std::cin >> pos;
+                remove(pos);
+            }
+            else if(choice == 7){
                 exit(0);
             }
         }
